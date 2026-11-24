@@ -221,7 +221,7 @@ $('enviar').addEventListener('click',async()=>{
     if(!r.ok)throw new Error(j.erro||'erro');
     showOut(true,j.atualizado?'Voto atualizado!':'Voto registrado!',`Valeu, ${nome}. Se mudar de ideia, é só alterar aqui e enviar de novo com o mesmo nome.`,`${nome} já votou no cardápio da viagem! Falta você: ${location.origin}`,false);
   }catch(e){
-    showOut(false,'Não consegui registrar no site','Sem problema: envie esta mensagem no grupo da viagem, sem editar a linha que começa com #CARD1.',codeMsg(),true);
+    showOut(false,'Não consegui registrar no site','Sem problema: envie esta mensagem no grupo da viagem, sem editar a linha que começa com #CARD1. (Motivo: '+(e.message||'sem conexão')+')',codeMsg(),true);
   }finally{b.disabled=false;b.textContent='Enviar meu voto'}
 });
 async function copy(text,el){try{await navigator.clipboard.writeText(text);el.textContent='Copiado! Agora é só colar.'}catch(e){el.textContent='Não deu para copiar: selecione o texto acima e copie.'}}
@@ -273,7 +273,7 @@ async function load(){
     const r=await fetch(API,{cache:'no-store'});const j=await r.json();
     if(!r.ok)throw new Error(j.erro);
     siteVotes=(j.votos||[]).filter(p=>p&&p.nome&&p.v);$('apMsg').textContent='';
-  }catch(e){$('apMsg').textContent='Não consegui buscar os votos do site. Os votos colados abaixo continuam valendo.'}
+  }catch(e){$('apMsg').textContent='Não consegui buscar os votos do site ('+(e.message||'sem conexão')+'). Os votos colados abaixo continuam valendo.'}
   finally{clearTimeout(t)}
   loaded=true;merge();renderRes();
 }
