@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a7f8c">
+<title>Cardápio da Viagem</title>
+<meta property="og:title" content="Vote no cardápio da viagem">
+<meta property="og:description" content="7 dias, 13 pessoas. Marque o que você quer comer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;
+--bg:light-dark(#fff8ec,#05252d);--ink:light-dark(#0b3640,#e9f7f6);--mute:light-dark(#5f7a7d,#9cc2c2);
+--sea:#0a7f8c;--deep:#06495a;--turq:#14b8ae;--coral:#ff6b57;--sun:#ffc93c;
+--sea2:light-dark(#dff4f1,#0c3a43);--line:light-dark(#f0e2c8,#14444e);--card:light-dark(#ffffff,#0a3039);
+--coral2:light-dark(#fff0ea,#3a1f1b);--no:light-dark(#b9a98c,#6f7f80)}
+@media (prefers-color-scheme:dark){:root{--bg:#05252d;--ink:#e9f7f6;--mute:#9cc2c2;--sea2:#0c3a43;--line:#14444e;--card:#0a3039;--coral2:#3a1f1b;--no:#6f7f80}}
+@media (prefers-color-scheme:light){:root{--bg:#fff8ec;--ink:#0b3640;--mute:#5f7a7d;--sea2:#dff4f1;--line:#f0e2c8;--card:#fff;--coral2:#fff0ea;--no:#b9a98c}}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Nunito,system-ui,sans-serif;overflow-x:clip;padding-bottom:110px}
+h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;line-height:1.05;text-wrap:balance;margin:0;font-weight:800}
+.top{position:relative;background:linear-gradient(180deg,#7fd8e8 0%,#2bb7c2 45%,var(--sea) 100%);color:#fff;padding:calc(env(safe-area-inset-top) + clamp(26px,5vw,52px)) max(5vw,16px) 0;overflow:hidden}
+.top .sun{position:absolute;right:max(5vw,16px);top:18px;width:clamp(70px,14vw,120px);height:auto}
+.top h1{font-size:clamp(36px,7vw,54px);position:relative;text-shadow:0 2px 0 rgba(6,73,90,.25);max-width:12ch}
+.top p{margin:10px 0 0;max-width:46ch;font-weight:600;position:relative}
+.waves{display:block;width:calc(100% + 2*max(5vw,16px));max-width:none;height:46px;margin:18px calc(-1*max(5vw,16px)) -1px}
+.tabs{display:flex;gap:6px;background:var(--bg);padding:0 max(5vw,16px)}
+.tabs a{color:var(--mute);text-decoration:none;font-weight:800;padding:12px 16px;min-height:44px;border-bottom:3px solid transparent}
+.tabs a.on{color:var(--ink);border-color:var(--coral)}
+.wrap{max-width:760px;margin:0 auto;padding:20px max(4vw,14px)}
+label.f{display:block;font-weight:800;margin:0 0 6px}
+input[type=text],input[type=number],textarea{font:inherit;font-size:16px;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
+textarea{min-height:130px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hint{color:var(--mute);font-size:15px;margin:8px 0 0}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:14px;font-weight:700}
+.leg span{padding:4px 10px;border-radius:999px;color:#fff}
+.cats{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--line);display:flex;gap:8px;overflow-x:auto;padding:10px max(4vw,14px);scrollbar-width:none}
+.cats a{flex:none;text-decoration:none;color:var(--ink);background:var(--sea2);padding:8px 14px;border-radius:999px;font-weight:800;font-size:15px;white-space:nowrap}
+.cats a small{color:var(--mute);font-weight:700;margin-left:5px}
+.cats a.ok{background:var(--turq);color:#fff}.cats a.ok small{color:#e7fffc}
+section.cat{scroll-margin-top:66px;margin-top:30px}
+section.cat h2{font-size:34px;color:var(--sea)}
+section.cat .sub{color:var(--mute);margin:2px 0 10px;font-weight:600}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1.5px dashed var(--line)}
+.row .nm{font-weight:700}
+.seg{display:flex;background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden}
+.seg button{font:inherit;font-size:14px;font-weight:800;border:0;background:transparent;color:var(--mute);min-width:60px;min-height:44px;padding:0 8px;cursor:pointer}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed=true][data-v="1"]{background:var(--no);color:#fff}
+.seg button[aria-pressed=true][data-v="2"]{background:var(--turq);color:#fff}
+.seg button[aria-pressed=true][data-v="3"]{background:var(--coral);color:#fff}
+@media(max-width:480px){.row{grid-template-columns:1fr;gap:6px}.seg{width:100%}.seg button{flex:1}}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--deep);color:#fff;padding:12px max(4vw,14px) calc(12px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center;justify-content:space-between;box-shadow:0 -6px 20px rgba(6,73,90,.25)}
+.bar .cnt{font-size:14px;color:#bfe9ec}
+.bar .cnt b{color:var(--sun);font-size:19px}
+.btn{font:inherit;font-weight:800;border:0;border-radius:14px;min-height:48px;padding:0 22px;cursor:pointer;background:var(--coral);color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.alt{background:var(--sea2);color:var(--ink)}
+.btn.wa{background:#1fa855}
+.panel{background:var(--coral2);border-radius:20px;padding:20px;margin-top:22px;border:2px solid var(--line)}
+.panel.ok{background:var(--sea2)}
+.panel pre{white-space:pre-wrap;word-break:break-word;background:var(--card);border-radius:12px;padding:12px;font-size:14px;max-height:240px;overflow:auto}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.msg{font-weight:800;color:var(--coral);min-height:1.4em;margin-top:8px}
+.voters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.voters span{background:var(--sea2);padding:4px 12px;border-radius:999px;font-size:14px;font-weight:800}
+.prog{height:12px;border-radius:6px;background:var(--sea2);overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--turq),var(--sun))}
+.rk{margin-top:30px}
+.rk .hd{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.rk .hd h2{font-size:32px;color:var(--sea)}
+.cut{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mute);font-weight:700}
+.cut input{width:78px;padding:8px 10px}
+.it{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1.5px dashed var(--line)}
+.it.out{opacity:.5}
+.pos{width:2.2em;height:2.2em;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--sea2)}
+.it.in .pos{background:var(--sun);color:#5a3d00}
+.it .meter{height:7px;border-radius:4px;background:var(--sea2);margin-top:5px;overflow:hidden}
+.it .meter i{display:block;height:100%;background:var(--turq)}
+.it.in .meter i{background:var(--coral)}
+.it .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px;color:var(--mute)}
+.it .num b{display:block;color:var(--ink);font-size:17px}
+details{margin-top:24px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px 16px}
+summary{cursor:pointer;font-weight:800;min-height:32px}
+.obs li{margin:6px 0}
+.empty{color:var(--mute);padding:20px 0;font-weight:600}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:30px 16px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.seg button{transition:background .15s,color .15s}.sun{animation:sp 40s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}}
+</style>
+</head>
+<body>
+<header class="top">
+  <svg class="sun" viewBox="0 0 120 120" aria-hidden="true"><g fill="#ffc93c"><circle cx="60" cy="60" r="28"/><g stroke="#ffc93c" stroke-width="7" stroke-linecap="round"><path d="M60 8v14M60 98v14M8 60h14M98 60h14M23 23l10 10M87 87l10 10M23 97l10-10M87 33l10-10"/></g></g><circle cx="52" cy="52" r="12" fill="#ffe08a" opacity=".8"/></svg>
+  <h1>Cardápio da viagem</h1>
+  <p>7 dias, 13 pessoas e a Chef Rose Jardim na cozinha. Marque o que você quer comer: os mais votados viram o cardápio.</p>
+  <svg class="waves" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 18 C150 0 250 36 400 18 S650 0 800 18 S1050 36 1200 16 V46 H0Z" fill="#14b8ae" opacity=".55"/>
+    <path d="M0 28 C170 12 280 44 430 28 S680 12 830 28 S1060 44 1200 26 V46 H0Z" fill="#fff" opacity=".55"/>
+    <path d="M0 36 C180 26 300 48 460 36 S720 24 880 36 S1080 48 1200 34 V46 H0Z" style="fill:var(--bg)"/>
+  </svg>
+</header>
+<nav class="tabs"><a href="#votar" id="tVotar">Votar</a><a href="#resultado" id="tApur">Resultado</a></nav>
+
+<main id="vVotar">
+  <div class="wrap">
+    <label class="f" for="nome">Seu nome</label>
+    <input type="text" id="nome" maxlength="30" autocomplete="given-name" placeholder="Como você aparece no grupo">
+    <p class="hint">Em cada item escolha uma opção. O que tanto faz, deixe em branco.</p>
+    <div class="leg"><span style="background:var(--no)">Não: prefiro que não tenha</span><span style="background:var(--turq)">Gosto: pode ter</span><span style="background:var(--coral)">Amo: quero muito</span></div>
+  </div>
+  <nav class="cats" id="catNav"></nav>
+  <div class="wrap" id="lists"></div>
+  <div class="wrap">
+    <section class="cat">
+      <h2>Alguma restrição?</h2>
+      <p class="sub">Alergia, algo que você não come, pedido especial para a chef.</p>
+      <input type="text" id="obs" maxlength="140" placeholder="Opcional">
+    </section>
+    <div class="panel" id="out" hidden>
+      <h3 id="outTit" style="font-size:26px"></h3>
+      <p class="hint" id="outSub" style="color:inherit"></p>
+      <pre id="outTxt" hidden></pre>
+      <div class="acts">
+        <a class="btn wa" id="waBtn" href="#" target="_blank" rel="noopener">Avisar no WhatsApp</a>
+        <button class="btn alt" id="cpBtn" type="button" hidden>Copiar mensagem</button>
+        <a class="btn alt" href="#resultado">Ver resultado parcial</a>
+      </div>
+      <div class="msg" id="cpMsg"></div>
+    </div>
+  </div>
+  <div class="bar">
+    <div class="cnt"><b id="nMarc">0</b> itens marcados</div>
+    <button class="btn" id="enviar" type="button">Enviar meu voto</button>
+  </div>
+</main>
+
+<main id="vApur" hidden>
+  <div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2 style="font-size:34px;color:var(--sea)">Resultado</h2>
+      <button class="btn alt" id="atualizar" type="button">Atualizar</button>
+    </div>
+    <div class="msg" id="apMsg"></div>
+    <div id="res"></div>
+    <details id="colaBox">
+      <summary>Alguém mandou o voto pelo WhatsApp? Cole aqui</summary>
+      <p class="hint">Cole as mensagens com a linha #CARD1. Elas somam com os votos do site (se a pessoa votou nos dois, vale o do site).</p>
+      <textarea id="cola" placeholder="Cole as mensagens aqui"></textarea>
+      <div class="acts"><button class="btn" id="contar" type="button">Somar estes votos</button><button class="btn alt" id="limpar" type="button">Limpar</button></div>
+    </details>
+  </div>
+</main>
+<footer>Votação do cardápio · viagem 2026</footer>
+
+<script>
+{
+const CATS=[
+{k:'C',n:'Café da manhã',sub:'Todos os dias',cut:12,items:['Bolos variados','Biscoitos artesanais','Pão de queijo','Broa de milho','Banana da terra','Ovos mexidos','Suco detox natural','Cuscuz de tapioca','Cuscuz de milho com carne seca','Cachorro-quente','Pão delícia','Pães recheados variados','Tábua de frutas frescas','Tábua de frios','Munguzá','Lelé com coco fresco','Torta salgada','Quiche','Café com leite','Mel','Granola','Iogurte']},
+{k:'E',n:'Entradas',sub:'Aperitivos ao longo do dia',cut:14,items:['Camarão crocante','Dadinho de tapioca com melado','Dadinho de mandioca com carne seca','Ceviche de salmão com manga','Crudo de peixe branco com tangerina','Vinagrete de polvo','Caldinho de camarão com crispy de couve','Pérola de queijo com maionese de manjericão','Cocktail de camarão com barquinha de tapioca','Brusqueta de tomate confitado','Canapé de banana da terra com carne seca','Carne do sol com aipim ou tata','Camarão ao alho e óleo','Camarão selado','Casquinha de siri com farofinha de dendê','Carpaccio de salmão ou carne','Antepasto de berinjela','Patinha de caranguejo com vinagrete','Pastel de carne ou queijo','Tábua de frios','Bolinho de risoto com queijo','Cuscuz marroquino','Terrine caprese','Coxinha cremosa','Burrata com pesto e tomate cereja','Polvo à Provençal','Atum na crosta de gergelim']},
+{k:'P',n:'Pratos principais',sub:'Uma refeição principal por dia',cut:7,items:['Moqueca de peixe','Moqueca mista','Moqueca de banana da terra','Bobó de camarão','Camarão na moranga','Filé de peixe na crosta de castanha','Camarão a mediterrâneo','Feijoada de frutos do mar','Bem-vindo ao Nordeste','Risoto três queijos','Risoto do mar','Risoto de alho-poró','Filé na manteiga de ervas','Filé com molho rôti','Peixe inteiro assado com legumes','Peixe frito com vinagrete e farofa','Filé de peixe grelhado com arroz de castanha','Paella mineira','Paella baiana','Arroz cremoso de camarão','Fettuccine ao molho branco','Parmegiana','Escondidinho de carne seca','Caldeirada de frutos do mar','Picadinho de filé mignon com farofinha de banana da terra','Feijoada','Filé de peixe com purê de banana da terra','Conchiglione com mussarela e molho de tomate','Lasanha de camarão ao molho branco','Lagosta com risoto e azeite de coentro','Lagosta com purê e legumes','Camarão internacional']},
+{k:'A',n:'Acompanhamentos',sub:'Para os pratos principais',cut:6,items:['Arroz branco','Farofa','Salada de folhas','Salada de feijão fradinho','Batatonese','Batata sauté','Purê de banana da terra','Purê de batata','Legumes confitados','Salada rica','Feijão tropeiro','Feijão de caldo com linguiça']},
+{k:'S',n:'Sobremesas',sub:'Para fechar o dia',cut:5,items:['Cocada de forno','Queijadinha cremosa com sorvete de creme e lasca de coco tostado','Palha italiana','Pudim – de leite ou de mirtilo','Pavê chocolatudo','Brigadeiro cremoso','Salada de frutas']}
+];
+const TOTAL_PESSOAS=13;
+const LBL={1:'Não',2:'Gosto',3:'Amo'};
+const API='/api/votos';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const KEY='cardapio-voto-v1';
+let st={};CATS.forEach(c=>st[c.k]=Array(c.items.length).fill(0));
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){CATS.forEach(c=>{if(s.v&&Array.isArray(s.v[c.k])&&s.v[c.k].length===c.items.length)st[c.k]=s.v[c.k]});$('nome').value=s.nome||'';$('obs').value=s.obs||''}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({v:st,nome:$('nome').value,obs:$('obs').value}))}catch(e){}};
+
+function renderNav(){
+  $('catNav').innerHTML=CATS.map(c=>{const m=st[c.k].filter(x=>x).length;return `<a href="#votar" data-go="${c.k}" class="${m===c.items.length?'ok':''}">${esc(c.n)}<small>${m}/${c.items.length}</small></a>`}).join('');
+  let t=0;CATS.forEach(c=>t+=st[c.k].filter(x=>x).length);$('nMarc').textContent=t;
+}
+$('lists').innerHTML=CATS.map(c=>`<section class="cat" id="cat-${c.k}"><h2>${esc(c.n)}</h2><p class="sub">${esc(c.sub)} · ${c.items.length} opções</p>${c.items.map((it,i)=>`<div class="row"><div class="nm">${esc(it)}</div><div class="seg" role="group" aria-label="${esc(it)}">${[1,2,3].map(v=>`<button type="button" data-c="${c.k}" data-i="${i}" data-v="${v}" aria-pressed="${st[c.k][i]===v}">${LBL[v]}</button>`).join('')}</div></div>`).join('')}</section>`).join('');
+$('lists').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-v]');if(!b)return;
+  const c=b.dataset.c,i=+b.dataset.i,v=+b.dataset.v;
+  st[c][i]=st[c][i]===v?0:v;
+  b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.v===st[c][i])));
+  save();renderNav();
+});
+$('catNav').addEventListener('click',e=>{const a=e.target.closest('a[data-go]');if(!a)return;e.preventDefault();$('cat-'+a.dataset.go).scrollIntoView({behavior:'smooth'})});
+['nome','obs'].forEach(id=>$(id).addEventListener('input',save));
+renderNav();
+
+const clean=s=>s.replace(/[|\n\r#]/g,' ').replace(/\s+/g,' ').trim();
+const vStr=()=>{const v={};CATS.forEach(c=>v[c.k]=st[c.k].join(''));return v};
+function codeMsg(){
+  const nome=clean($('nome').value),obs=clean($('obs').value);
+  const amo=[];CATS.forEach(c=>st[c.k].forEach((v,i)=>{if(v===3)amo.push(c.items[i])}));
+  let t=`Meu voto para o cardápio da viagem (${nome})\n`;
+  if(amo.length)t+=`Amo: ${amo.join(', ')}\n`;
+  if(obs)t+=`Restrição: ${obs}\n`;
+  return t+`\n#CARD1|${nome}|${CATS.map(c=>c.k+'='+st[c.k].join('')).join(';')}|${obs}`;
+}
+function showOut(ok,tit,sub,waText,fallback){
+  $('out').hidden=false;$('out').classList.toggle('ok',ok);
+  $('outTit').textContent=tit;$('outSub').textContent=sub;
+  $('outTxt').hidden=!fallback;$('cpBtn').hidden=!fallback;$('outTxt').textContent=fallback?waText:'';
+  $('waBtn').textContent=fallback?'Enviar no WhatsApp':'Avisar no grupo';
+  $('waBtn').href='https://wa.me/?text='+encodeURIComponent(waText);
+  $('cpMsg').textContent='';
+  $('out').scrollIntoView({behavior:'smooth',block:'center'});
+}
+$('enviar').addEventListener('click',async()=>{
+  const nome=clean($('nome').value);
+  if(!nome){$('nome').scrollIntoView({behavior:'smooth',block:'center'});$('nome').focus();$('nome').placeholder='Escreva seu nome antes de enviar';return}
+  if(+$('nMarc').textContent===0){showOut(false,'Marque pelo menos um item','Escolha Não, Gosto ou Amo em alguma opção e envie de novo.','',false);$('waBtn').hidden=true;return}
+  $('waBtn').hidden=false;
+  const b=$('enviar');b.disabled=true;b.textContent='Enviando…';
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome,v:vStr(),obs:clean($('obs').value)})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.erro||'erro');
+    showOut(true,j.atualizado?'Voto atualizado!':'Voto registrado!',`Valeu, ${nome}. Se mudar de ideia, é só alterar aqui e enviar de novo com o mesmo nome.`,`${nome} já votou no cardápio da viagem! Falta você: ${location.origin}`,false);
+  }catch(e){
+    showOut(false,'Não consegui registrar no site','Sem problema: envie esta mensagem no grupo da viagem, sem editar a linha que começa com #CARD1.',codeMsg(),true);
+  }finally{b.disabled=false;b.textContent='Enviar meu voto'}
+});
+async function copy(text,el){try{await navigator.clipboard.writeText(text);el.textContent='Copiado! Agora é só colar.'}catch(e){el.textContent='Não deu para copiar: selecione o texto acima e copie.'}}
+$('cpBtn').addEventListener('click',()=>copy($('outTxt').textContent,$('cpMsg')));
+
+/* Resultado */
+const CK='cardapio-cola-v1';
+try{$('cola').value=localStorage.getItem(CK)||''}catch(e){}
+const cuts={};CATS.forEach(c=>cuts[c.k]=c.cut);
+let siteVotes=[],pasteVotes=[],votes=[],loaded=false;
+function parse(text){
+  const out=[];const re=/#CARD1\|([^|\n]*)\|([A-Z]=[0-3]*(?:;[A-Z]=[0-3]*)*)\|?([^\n]*)/g;let m;
+  while((m=re.exec(text))){const v={};m[2].split(';').forEach(p=>{const [k,d]=p.split('=');v[k]=d});out.push({nome:m[1].trim()||'Sem nome',v,obs:(m[3]||'').trim(),src:'zap'})}
+  return out;
+}
+function merge(){
+  const by=new Map();
+  pasteVotes.forEach(p=>by.set(p.nome.toLowerCase(),p));
+  siteVotes.forEach(p=>by.set(p.nome.toLowerCase(),p));
+  votes=[...by.values()];
+}
+function rank(c){
+  return c.items.map((it,i)=>{let amo=0,gos=0,nao=0;votes.forEach(p=>{const d=+((p.v[c.k]||'')[i]||0);if(d===3)amo++;else if(d===2)gos++;else if(d===1)nao++});return{it,amo,gos,nao,pts:amo*2+gos-nao}}).sort((a,b)=>b.pts-a.pts||b.amo-a.amo||a.nao-b.nao);
+}
+function renderRes(){
+  if(!votes.length){$('res').innerHTML='<p class="empty">Ninguém votou ainda. Mande o link no grupo!</p>';return}
+  const pct=Math.min(100,votes.length/TOTAL_PESSOAS*100);
+  let h=`<p style="margin-top:16px;font-weight:700"><b style="font-size:22px;color:var(--coral)">${votes.length}</b> de ${TOTAL_PESSOAS} pessoas votaram</p><div class="prog"><i style="width:${pct}%"></i></div>
+  <div class="voters">${votes.map(p=>`<span>${esc(p.nome)}</span>`).join('')}</div>
+  <p class="hint">Pontos: Amo = 2, Gosto = 1, Não = −1. Ajuste quantos itens de cada categoria entram; os de bolinha amarela entram no cardápio.</p>`;
+  CATS.forEach(c=>{
+    const r=rank(c);const max=Math.max(1,...r.map(x=>x.pts));
+    h+=`<section class="rk"><div class="hd"><h2>${esc(c.n)}</h2><label class="cut">Entram <input type="number" min="0" max="${c.items.length}" value="${cuts[c.k]}" data-cut="${c.k}"> itens</label></div>
+    ${r.map((x,i)=>`<div class="it ${i<cuts[c.k]?'in':'out'}"><span class="pos">${i+1}</span><div><div style="font-weight:700">${esc(x.it)}</div><div class="meter"><i style="width:${Math.max(0,x.pts)/max*100}%"></i></div></div><div class="num"><b>${x.pts} pts</b>${x.amo} amo · ${x.gos} gosto · ${x.nao} não</div></div>`).join('')}</section>`;
+  });
+  const obs=votes.filter(p=>p.obs);
+  if(obs.length)h+=`<section class="rk obs"><h2>Restrições e pedidos</h2><ul>${obs.map(p=>`<li><b>${esc(p.nome)}:</b> ${esc(p.obs)}</li>`).join('')}</ul></section>`;
+  h+=`<div class="panel"><h3 style="font-size:26px">Cardápio final para a chef</h3><pre id="final"></pre><div class="acts"><button class="btn" id="cpFinal" type="button">Copiar cardápio</button><a class="btn wa" id="waFinal" href="#" target="_blank" rel="noopener">Enviar no WhatsApp</a></div><div class="msg" id="finMsg"></div></div>`;
+  $('res').innerHTML=h;
+  let f=`CARDÁPIO DA VIAGEM – ${TOTAL_PESSOAS} pessoas, 7 dias\n`;
+  CATS.forEach(c=>{const r=rank(c).slice(0,cuts[c.k]);f+=`\n${c.n.toUpperCase()}\n`+r.map(x=>'• '+x.it).join('\n')+'\n'});
+  if(obs.length)f+='\nRESTRIÇÕES\n'+obs.map(p=>`• ${p.nome}: ${p.obs}`).join('\n')+'\n';
+  $('final').textContent=f;$('waFinal').href='https://wa.me/?text='+encodeURIComponent(f);
+}
+async function load(){
+  $('apMsg').textContent='Carregando votos…';
+  const t=setTimeout(()=>{$('apMsg').textContent='Demorando mais que o normal…'},10000);
+  try{
+    const r=await fetch(API,{cache:'no-store'});const j=await r.json();
+    if(!r.ok)throw new Error(j.erro);
+    siteVotes=(j.votos||[]).filter(p=>p&&p.nome&&p.v);$('apMsg').textContent='';
+  }catch(e){$('apMsg').textContent='Não consegui buscar os votos do site. Os votos colados abaixo continuam valendo.'}
+  finally{clearTimeout(t)}
+  loaded=true;merge();renderRes();
+}
+$('res').addEventListener('change',e=>{const i=e.target.closest('input[data-cut]');if(!i)return;cuts[i.dataset.cut]=Math.max(0,+i.value||0);renderRes()});
+$('res').addEventListener('click',e=>{if(e.target.id==='cpFinal')copy($('final').textContent,$('finMsg'))});
+$('atualizar').addEventListener('click',load);
+$('contar').addEventListener('click',()=>{const t=$('cola').value;try{localStorage.setItem(CK,t)}catch(e){}pasteVotes=parse(t);merge();renderRes();$('apMsg').textContent=pasteVotes.length?`${pasteVotes.length} voto(s) do WhatsApp somados.`:'Nenhuma linha #CARD1 encontrada no texto colado.'});
+$('limpar').addEventListener('click',()=>{$('cola').value='';pasteVotes=[];try{localStorage.removeItem(CK)}catch(e){}merge();renderRes()});
+pasteVotes=parse($('cola').value);
+
+function route(){const ap=location.hash==='#resultado';$('vVotar').hidden=ap;$('vApur').hidden=!ap;$('tVotar').classList.toggle('on',!ap);$('tApur').classList.toggle('on',ap);if(ap)load()}
+window.addEventListener('hashchange',route);route();
+}
+</script>
+</body>
+</html>
